@@ -1,0 +1,6 @@
+Milk,2.00,1
+OJ,2.50,6
+Water,1.50,10
+Soda,2.25,6
+Coffee,1.25,4
+Monster,3.00,5
