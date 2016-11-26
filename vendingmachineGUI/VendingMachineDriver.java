@@ -1,129 +1,196 @@
 package vending_Machine;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class VendingMachineDriver extends JFrame implements ActionListener{
+/*************************************************************************
+ * Simulates a real life vending machine with stock read from a file.
+ * 
+ * CSCE 155A Fall 2016
+ * Assignment 4
+ * @file VendingMachine.java
+ * @author Jeremy Suing
+ * @version 1.0
+ * @date March 7, 2016
+ *************************************************************************/
+public class VendingMachine {
 
-	private JButton A,B,C,D,E,F;
-	private JButton one,two,three,four,five,six;
-	private JLabel background;
-	private JLabel machineChoice;
-	private JLabel inputMoney;
-	private JLabel search;
-	private JLabel itemInfo;
-	private JLabel makeSelection;
-	private JLabel moneyLeft;
-	private JLabel itemSelection;
-	private JComboBox vendChoice;
-	private JTextField moneyInput;
-	private JTextField itemSearch;
-	private JTextField moneyRemain;
-	private JTextField itemSelected;
+	//data members
+	private Item[] stock;  //Array of Item objects in machine
+	private double money;  //Amount of revenue earned by machine
 
 
-	public VendingMachineDriver (String title){
-		//Set up the window
-		this.setSize(1000, 300); //set window size
-		this.setTitle(title); //set window title
-		this.setResizable(true); //do not allow the user to resize the window
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE); //quit the program when the red x is clicked
-		//The background label to which all other components will be added
-		background = new JLabel();
-		this.add(background); //add the background to the JFrame	
+	/*********************************************************************
+	 * This is the constructor of the VendingMachine class that take a
+	 * file name for the items to be loaded into the vending machine.
+	 *
+	 * It creates objects of the Item class from the information in the 
+	 * file to populate into the stock of the vending machine.  It does
+	 * this by looping the file to determine the number of items and then
+	 * reading the items and populating the array of stock. 
+	 * 
+	 * @param filename Name of the file containing the items to stock into
+	 * this instance of the vending machine. 
+	 * @throws FileNotFoundException If issues reading the file.
+	 *********************************************************************/
+	public VendingMachine(String filename) throws FileNotFoundException{
+		//Open the file to read with the scanner
+		File file = new File(filename);
+		Scanner scan = new Scanner(file);
 
-		machineChoice = new JLabel("Please Select A Vending Machine.");
-		machineChoice.setBounds(50, 20, 500, 100);
-		machineChoice.setFont (machineChoice.getFont ().deriveFont (20.0f));
-		background.add(machineChoice);
-		String[] machines = {"Drinks", "Snacks"};
-		vendChoice = new JComboBox(machines);
-		vendChoice.setBounds(400, 20, 500, 100);
-		vendChoice.setFont (vendChoice.getFont ().deriveFont (20.0f));
-		background.add(vendChoice);
+		//Determine the total number of items listed in the file
+		int totalItem = 0;
+		while (scan.hasNextLine()){
+			scan.nextLine();
+			totalItem++;
+		} //End while another item in file
+		//Create the array of stock with the appropriate number of items
+		stock = new Item[totalItem];
+		scan.close();
 
-		vendChoice.addActionListener(this);
+		//Open the file again with a new scanner to read the items
+		scan = new Scanner(file);
+		int itemQuantity = -1;
+		double itemPrice = -1;
+		String itemDesc = "";
+		int count = 0;
+		String line = "";
+
+		//Read through the items in the file to get their information
+		//Create the item objects and put them into the array of stock
+		while(scan.hasNextLine()){
+			line = scan.nextLine();
+			String[] tokens = line.split(",");
+			try {
+				itemDesc = tokens[0];
+				itemPrice = Double.parseDouble(tokens[1]);
+				itemQuantity = Integer.parseInt(tokens[2]);
+
+				stock[count] = new Item(itemDesc, itemPrice, itemQuantity);
+				count++;
+			} catch (NumberFormatException nfe) {
+				System.out.println("Bad item in file " + filename + 
+						" on row " + (count+1) + ".");
+			}
+		} //End while another item in file
+		scan.close();
+
+		//Initialize the money data variable.
+		money = 0.0;
+	} //End VendingMachine constructor
+	public void setMoney(Double money){
+		this.money = this.money + money;
+	}
+	public double getMoney(){
+		return money;
+	}
+	public Item[] getStock(){
+		return stock;
 	}
 
+	//method to handle the vending transaction
+	public void vend(Item[] userMachine){
+		Scanner scnr = new Scanner(System.in);
+		double userMoney = 0;
+		double userChoice = 0;
+		int userInput = 0;
 
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
+		do{
+			try{
+				System.out.print("\nPlease enter some money into the machine.(Enter -1 to exit.)");
+				userChoice = scnr.nextFloat();
+			}catch(InputMismatchException e){
+				scnr.next();
+			}
+			userMoney += userChoice;
+			//exits the machine if user desires
+			if(userChoice == -1){
+				System.out.printf("You did not buy anything from this machine. Your change is $%.2f.\n",(userMoney+1));
+				break;
+			}
+			if(userMoney < 0){
+				userMoney -= userChoice;
+				System.out.println("Please input a proper amount.");
+				continue;
+			}
+			//lets user make a choice of item in the vending machine and handles the transaction appropriately
+			else if(userChoice >= 0){
+				System.out.printf("\nYou now have $%.02f to spend. Please make a selection (enter 0 to exit)",userMoney );
+				try{
+					userInput = scnr.nextInt();
+				}catch(InputMismatchException e){
+					scnr.next();
+				}
+			}
+			if(userInput == 0){
+				continue;
+			}
+			while(userInput > userMachine.length){
+				System.out.print("Invalid selection please try again: ");
+				userInput = scnr.nextInt();
 
-		VendingMachine drinks = null;// creates a VendingMachine object for the drink machine
-		VendingMachine snacks = null;// creates a VendingMachine object for the snacks machine
-		boolean drinkMachine = false;
-		JFrame frame2 = new JFrame();
-		JFrame drink = new JFrame();
-		JFrame snack = new JFrame();
-		frame2.setSize(1000, 300); //set window size
-		frame2.setResizable(true); //do not allow the user to resize the window
-		frame2.setDefaultCloseOperation(EXIT_ON_CLOSE); //quit the program when the red x is clicked
-		//The background label to which all other components will be added
-		background = new JLabel();
-		frame2.add(background); //add the background to the JFrame
-		inputMoney = new JLabel("Please enter money into the machine: ");
-		inputMoney.setBounds(50, 20, 500, 100);
-		inputMoney.setFont (machineChoice.getFont ().deriveFont (20.0f));
-		background.add(inputMoney);
-		moneyInput = new JTextField();
-		moneyInput.setBounds(450, 20, 500, 100);
-		moneyInput.setFont (moneyInput.getFont ().deriveFont (20.0f));
-		background.add(moneyInput);
+			}	
 
-		//reads in the correct file and sends it to VendingMachine constructor to create a stock[] 
-		//of each file
-		try {
-			drinks = new VendingMachine("data/drinks.txt");
-			snacks = new VendingMachine("data/snacks.txt");
-		} catch (FileNotFoundException e) {
-		}
+			if(userInput != 0){
+				if(userMoney < userMachine[userInput-1].getPrice()){
+					System.out.print(outputMessage(1));
+					continue;
 
-		if(event.getSource() instanceof JComboBox){ 
-			frame2.setTitle("Input Money");
-			if(getSelectedItem().equals("Drinks")){
-				frame2.setVisible(true);
-				moneyInput.addActionListener(new ActionListener(){
+				}
+				while(userMachine[userInput-1].getQuantity() == 0){
+					System.out.print(outputMessage(2));
+					System.out.printf("\nYou now have $%.02f to spend. Please make a selection (enter 0 to exit)",userMoney );
+					userInput = scnr.nextInt();
 
-					public void actionPerformed(ActionEvent e) {
-						double userMoney = Double.parseDouble(moneyInput.getText());
-						System.out.printf("%.2f", userMoney);
-					}
-				});
-				this.dispose();
-				drinkMachine = true;
-			}else{
-				frame2.setVisible(true);
-				moneyInput.addActionListener(this);
-				this.dispose();
-				moneyInput.addActionListener(new ActionListener(){
+				}
 
-					public void actionPerformed(ActionEvent e) {
-						double userMoney = Double.parseDouble(moneyInput.getText());
-						System.out.printf("%.2f", userMoney);
-					}
-				});
+				System.out.printf("You bought %s for $%.02f your change is $%.02f.\n",userMachine[userInput-1].getDescription(),userMachine[userInput-1].getPrice(), (userMoney - userMachine[userInput-1].getPrice()));
+				userMachine[userInput-1].setQuantity(userMachine[userInput-1].getQuantity() - 1);
+				setMoney(userMachine[userInput-1].getPrice());
+				break;
 			}
 
-		}
-	}	
-	public String getSelectedItem() {
-		return (String)vendChoice.getSelectedItem();    
+
+			else{
+				System.out.println("Invalid choice. Please try again");
+				continue;
+			}
+
+
+		}while(userMoney != -1);
+		scnr.nextLine();
 	}
+	//returns the proper message if vend has an issue
+	public String outputMessage(Integer message){
+		String msg = "";
+		String msg1 = "You do not have enough money. Please add more money or exit.";
+		String msg2 = "Sorry the machine is currently out of that item.";
+		switch(message){
+		case(1):
+			msg = msg1;
+		break;
+		case(2):
+			msg = msg2;
+		break;
 
-
-	public static void main(String[] args){
-		VendingMachineDriver machineChoice = new VendingMachineDriver("Vending Machine Selection");
-		machineChoice.setVisible(true);
+		}
+		return msg;
+	}
+	//Creates and prints the menu of the vending machine
+	public ArrayList<String> printMenu(Item[] machineChoice){
+		ArrayList<String> item = new ArrayList<String>();
+		System.out.format("Menu:\n%s %5s %10s %5s\n","Item#","Item","Price","Qty");
+		for(int i=0; i < machineChoice.length; ++i){
+			item.add(machineChoice[i].getDescription() + " - $" + machineChoice[i].getPrice() + " (" + machineChoice[i].getQuantity() + ")");
+			System.out.print(item.get(i));
+//			machineChoice[i].getDescription(),machineChoice[i].getPrice(),machineChoice[i].getQuantity());
+		}
+		vend(machineChoice);
+		return item;
+	
 	}
 
 }
