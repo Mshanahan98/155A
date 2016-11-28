@@ -1,5 +1,6 @@
 package vending_Machine;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
@@ -31,6 +32,7 @@ public class VendingMachineDriver extends JFrame implements ActionListener{
 	private JTextField itemSelected;
 	private double userMoney = 0;
 	private JList<String> items;
+	private JScrollPane items2;
 	private JFrame frame2;
 	private JFrame frame3;
 	public String[] b;
@@ -58,16 +60,19 @@ public class VendingMachineDriver extends JFrame implements ActionListener{
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE); //quit the program when the red x is clicked
 		//The background label to which all other components will be added
 		background = new JLabel();
+		background.setBackground(Color.black);
+		background.setOpaque(true);
 		this.add(background); //add the background to the JFrame	
 
 		machineChoice = new JLabel("Please Select A Vending Machine.");
-		machineChoice.setBounds(50, 20, 500, 100);
-		machineChoice.setFont (machineChoice.getFont ().deriveFont (20.0f));
+		machineChoice.setBounds(10, 50, 500, 100);
+		machineChoice.setFont (machineChoice.getFont ().deriveFont (25.0f));
+		machineChoice.setForeground(Color.white);
 		background.add(machineChoice);
 		String[] machines = {"Drinks", "Snacks"};
 		vendChoice = new JComboBox(machines);
-		vendChoice.setBounds(400, 20, 500, 100);
-		vendChoice.setFont (vendChoice.getFont ().deriveFont (20.0f));
+		vendChoice.setBounds(450, 50, 500, 100);
+		vendChoice.setFont (vendChoice.getFont ().deriveFont (25.0f));
 		background.add(vendChoice);
 
 		vendChoice.addActionListener(this);
@@ -83,17 +88,21 @@ public class VendingMachineDriver extends JFrame implements ActionListener{
 		//The background label to which all other components will be added
 		background = new JLabel();
 		frame2.add(background); //add the background to the JFrame
+		background.setBackground(Color.black);
+		background.setOpaque(true);
 		inputMoney = new JLabel("Please enter money into the machine: ");
-		inputMoney.setBounds(50, 20, 500, 100);
-		inputMoney.setFont (machineChoice.getFont ().deriveFont (20.0f));
+		inputMoney.setBounds(10, 50, 500, 100);
+		inputMoney.setFont (machineChoice.getFont ().deriveFont (25.0f));
+		inputMoney.setForeground(Color.white);
 		background.add(inputMoney);
 		error = new JLabel();
-		error.setBounds(450, 125, 500, 100);
-		error.setFont (error.getFont ().deriveFont (30.0f));
+		error.setBounds(475, 125, 500, 100);
+		error.setFont (error.getFont ().deriveFont (25.0f));
+		error.setForeground(Color.white);
 		background.add(error);
 		moneyInput = new JTextField();
-		moneyInput.setBounds(450, 20, 500, 100);
-		moneyInput.setFont (moneyInput.getFont ().deriveFont (20.0f));
+		moneyInput.setBounds(475, 50, 500, 100);
+		moneyInput.setFont (moneyInput.getFont ().deriveFont (25.0f));
 		background.add(moneyInput);
 		moneyInput.addActionListener(this);
 		this.setVisible(false);
@@ -118,9 +127,12 @@ public class VendingMachineDriver extends JFrame implements ActionListener{
 		frame3.setDefaultCloseOperation(EXIT_ON_CLOSE); //quit the program when the red x is clicked
 		background = new JLabel();
 		frame3.add(background);
+		background.setBackground(Color.black);
+		background.setOpaque(true);
 		search = new JLabel("Search for item: ");
 		search.setBounds(20, 200, 300, 75);
 		search.setFont (search.getFont ().deriveFont (30.0f));
+		search.setForeground(Color.white);
 		background.add(search);
 		itemSearch = new JTextField();
 		itemSearch.setBounds(275, 200, 300, 75);
@@ -129,58 +141,60 @@ public class VendingMachineDriver extends JFrame implements ActionListener{
 		makeSelection = new JLabel("Make a selection:");
 		makeSelection.setBounds(220, 350, 600, 300);
 		makeSelection.setFont (search.getFont ().deriveFont (50.0f));
+		makeSelection.setForeground(Color.white);
 		background.add(makeSelection);
 		itemInfo = new JLabel();
 		itemInfo.setBounds(300, 300, 400, 75);
 		itemInfo.setFont (itemInfo.getFont ().deriveFont (30.0f));
+		itemInfo.setForeground(Color.white);
 		background.add(itemInfo);
 
 		A = new JButton("A");
-		A.setBounds(200, 600, 75, 75);
+		A.setBounds(210, 600, 75, 75);
 		A.setFont (A.getFont ().deriveFont (45.0f));
 		background.add(A);
 		B = new JButton("B");
-		B.setBounds(300, 600, 75, 75);
+		B.setBounds(310, 600, 75, 75);
 		B.setFont (B.getFont ().deriveFont (45.0f));
 		background.add(B);
 		C = new JButton("C");
-		C.setBounds(200, 700, 75, 75);
+		C.setBounds(210, 700, 75, 75);
 		C.setFont (C.getFont ().deriveFont (45.0f));
 		background.add(C);
 		D = new JButton("D");
-		D.setBounds(300, 700, 75, 75);
+		D.setBounds(310, 700, 75, 75);
 		D.setFont (D.getFont ().deriveFont (45.0f));
 		background.add(D);
 		E = new JButton("E");
-		E.setBounds(200, 800, 75, 75);
+		E.setBounds(210, 800, 75, 75);
 		E.setFont (E.getFont ().deriveFont (45.0f));
 		background.add(E);
 		F = new JButton("F");
-		F.setBounds(300, 800, 75, 75);
+		F.setBounds(310, 800, 75, 75);
 		F.setFont (F.getFont ().deriveFont (45.0f));
 		background.add(F);
 		one = new JButton("1");
-		one.setBounds(450, 600, 75, 75);
+		one.setBounds(460, 600, 75, 75);
 		one.setFont (one.getFont ().deriveFont (45.0f));
 		background.add(one);
 		two = new JButton("2");
-		two.setBounds(550, 600, 75, 75);
+		two.setBounds(560, 600, 75, 75);
 		two.setFont (two.getFont ().deriveFont (45.0f));
 		background.add(two);
 		three = new JButton("3");
-		three.setBounds(450, 700, 75, 75);
+		three.setBounds(460, 700, 75, 75);
 		three.setFont (three.getFont ().deriveFont (45.0f));
 		background.add(three);
 		four = new JButton("4");
-		four.setBounds(550, 700, 75, 75);
+		four.setBounds(560, 700, 75, 75);
 		four.setFont (four.getFont ().deriveFont (45.0f));
 		background.add(four);
 		five = new JButton("5");
-		five.setBounds(450, 800, 75, 75);
+		five.setBounds(460, 800, 75, 75);
 		five.setFont (five.getFont ().deriveFont (45.0f));
 		background.add(five);
 		six = new JButton("6");
-		six.setBounds(550, 800, 75, 75);
+		six.setBounds(560, 800, 75, 75);
 		six.setFont (six.getFont ().deriveFont (45.0f));
 		background.add(six);
 
@@ -194,25 +208,31 @@ public class VendingMachineDriver extends JFrame implements ActionListener{
 		}
 		setB(a.getMenu(a.getStock()));
 		items = new JList<String>(getB());
-		items.setBounds(1100,100,500,1250);
+		items.setBounds(1020,100,550,1250);
 		items.setFont(items.getFont().deriveFont((40.0f)));
-		background.add(items);
+		items.setBackground(Color.white);
+		items.setOpaque(true);
+		items2 = new JScrollPane(items);
+		items2.setBounds(1020,100,550,1250);
+		background.add(items2);
 		itemSelection = new JLabel("Item Selection: ");
 		itemSelection.setBounds(150, 1000, 300, 75);
 		itemSelection.setFont (itemSelection.getFont ().deriveFont (30.0f));
+		itemSelection.setForeground(Color.white);
 		background.add(itemSelection);
 		moneyLeft = new JLabel("Money Remaining: ");
 		moneyLeft.setBounds(150, 1200, 300, 75);
 		moneyLeft.setFont (moneyLeft.getFont ().deriveFont (30.0f));
+		moneyLeft.setForeground(Color.white);
 		background.add(moneyLeft);
 		moneyRemain = new JTextField();
-		moneyRemain.setBounds(500, 1200, 500, 100);
+		moneyRemain.setBounds(440, 1200, 250, 100);
 		moneyRemain.setFont (moneyRemain.getFont ().deriveFont (30.0f));
 		moneyRemain.setEditable(false);
 		moneyRemain.setText(String.format("$%.2f", getUserMoney()));
 		background.add(moneyRemain);
 		itemSelected = new JTextField();
-		itemSelected.setBounds(500, 1000, 500, 100);
+		itemSelected.setBounds(440, 1000, 250, 100);
 		itemSelected.setFont (moneyInput.getFont ().deriveFont (30.0f));
 		background.add(itemSelected);
 		getChange = new JButton("Get Change");
