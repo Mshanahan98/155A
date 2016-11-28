@@ -20,7 +20,7 @@ public class VendingMachine {
 	//data members
 	private Item[] stock;  //Array of Item objects in machine
 	private double money;  //Amount of revenue earned by machine
-
+	private double userMoney;
 
 	/*********************************************************************
 	 * This is the constructor of the VendingMachine class that take a
@@ -81,17 +81,23 @@ public class VendingMachine {
 		money = 0.0;
 	} //End VendingMachine constructor
 	public void setMoney(Double money){
-		this.money = this.money + money;
+		this.money += money;
+	}
+	public void setUserMoney(Double money){
+		this.userMoney += money;
 	}
 	public double getMoney(){
 		return money;
+	}
+	public double getUserMoney(){
+		return userMoney;
 	}
 	public Item[] getStock(){
 		return stock;
 	}
 
 	//method to handle the vending transaction
-	public void vend(Item[] userMachine){
+/*	public void vend(Item[] userMachine){
 		Scanner scnr = new Scanner(System.in);
 		double userMoney = 0;
 		double userChoice = 0;
@@ -178,19 +184,34 @@ public class VendingMachine {
 
 		}
 		return msg;
-	}
-	//Creates and prints the menu of the vending machine
-	public ArrayList<String> printMenu(Item[] machineChoice){
-		ArrayList<String> item = new ArrayList<String>();
-		System.out.format("Menu:\n%s %5s %10s %5s\n","Item#","Item","Price","Qty");
-		for(int i=0; i < machineChoice.length; ++i){
-			item.add(machineChoice[i].getDescription() + " - $" + machineChoice[i].getPrice() + " (" + machineChoice[i].getQuantity() + ")");
-			System.out.print(item.get(i));
-//			machineChoice[i].getDescription(),machineChoice[i].getPrice(),machineChoice[i].getQuantity());
+	}*/
+	public String itemSearch(String a, String[] b){
+		String item = "Item not found.";
+		for(int i=0; i< b.length; ++i){
+			if(b[i].toLowerCase().contains(a.toLowerCase())){
+				item = b[i];
+			}
+			
 		}
-		vend(machineChoice);
 		return item;
-	
 	}
-
+	//lists the vending machine inventory to choose from
+	public String[] getMenu(Item[] machineChoice){
+		ArrayList<String> item = new ArrayList<String>();
+		char alpha = 'A';
+		int j =  1;
+		for(int i=0; i < machineChoice.length; ++i){
+			if(j<=6){
+				String price = String.format("%.2f",machineChoice[i].getPrice());
+				item.add("" + alpha + j + ": " + machineChoice[i].getDescription() + " - $" + price + " (" + machineChoice[i].getQuantity() + ")");
+				++j;
+			}
+			if(j>6){
+				j=1;
+				++alpha;
+			}
+		}
+		String[] stock =  item.toArray(new String[item.size()]);
+		return stock;
+	}
 }
