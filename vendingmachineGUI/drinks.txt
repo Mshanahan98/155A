@@ -1,0 +1,24 @@
+Milk,2.00,1
+OJ,2.50,6
+Water,1.50,10
+Chocolate Milk,2.25,6
+Coffee,1.25,4
+Pepsi,3.00,5
+Cherry Pepsi,3.00,5
+Diet Pepsi,3.00,5
+Dr. Pepper,3.00,5
+Mountain Dew,3.00,5
+Coke,3.00,5
+Cherry Coke,3.00,5
+Diet Coke,3.00,5
+Amp,4.50,5
+Red Bull,4.50,5
+Monster,3.00,5
+Sprite,3.00,5
+Apple Juice,1.50,5
+Grape Juice,3.00,5
+Sunkist,3.00,5
+Surge,50.00,1
+Red Gatorade,3.00,5
+Blue Gatorade,3.00,5
+The other stuff,3.00,5

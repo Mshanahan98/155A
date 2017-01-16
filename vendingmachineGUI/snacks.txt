@@ -1,0 +1,12 @@
+Gummies,1.50,6
+Chips,1.00,6
+Raisins,1.25,5
+Pretzels,1.50,6
+Cookies,1.75,5
+Peanuts,1.25,4
+Doritos,2.00,3
+Snickers,1.50,4
+KitKat,1.75,3
+Garditos,3.00,5
+Jerky,5.00,10
+Twinkies,2.00,5
